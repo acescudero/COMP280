@@ -39,16 +39,16 @@ int main(int argc, char *argv[]) {
 
     struct ArincData message = {0b0, 0b11, resultData, 0b00, 0b10110001};
     
+    int bitCount = countBits(dataWholeResult) + 6;
+    if (bitCount%2!=0) {
+        message.parity = 0b1;
+    }
+    
     int firstPart = message.parity << 7 | message.sign << 5 | (message.dataWhole >> 14);
     int secondPart = (message.dataWhole >> 6) & 0xFF;
     int thirdPart = ((message.dataWhole << 2) & 0b11111100) | message.sdi;
     int fourthPart = message.label;
     int dataWholeResult = message.dataWhole;
-
-    int bitCount = countBits(dataWholeResult) + 6;
-    if (bitCount%2!=0) {
-        message.parity = 0b1;
-    }
 
     printf("%02x %02x %02x %02x", firstPart, secondPart, thirdPart, fourthPart);
 
